@@ -1,0 +1,31 @@
+Guía de Uso - Seguimiento de Pupila para Control del Cursor
+
+1. Requisitos Previos
+   Antes de ejecutar el código, instala las dependencias necesarias ejecutando en la terminal:
+
+pip install opencv-python mediapipe pyautogui numpy
+
+
+2. Cómo Iniciar el Código
+- Conecta tu cámara web.
+- Ejecuta el script con:
+  ```
+  python nombre_del_archivo.py
+  ```
+- La cámara capturará tu rostro y el cursor se moverá conforme al movimiento de tu ojo derecho.
+
+3. Cómo Cerrar el Programa
+- Para cerrar el programa, presiona la tecla "q".
+- Si el cursor está moviéndose erráticamente, cubre tu ojo derecho para desactivar el seguimiento de la pupila y detener el movimiento del cursor.
+
+4. Solución de Problemas
+- Si el cursor se mueve de forma errática, desactiva el touchpad o mouse desde la configuración de tu sistema operativo.
+- Si el cursor sigue moviéndose aunque no lo desees, cubre tu ojo derecho para inhabilitar la detección y detener el movimiento.
+
+5. Notas Adicionales
+- La zona muerta evita que movimientos pequeños de la pupila muevan el cursor.
+- El suavizado aplicado a los movimientos hace que el cursor se mueva de forma más precisa y sin saltos bruscos.
+
+---
+
+Este código permite controlar el cursor del mouse usando el movimiento de la pupila del ojo derecho, ideal para mejorar la accesibilidad. Para cualquier inconveniente, simplemente cubre tu ojo derecho para detener el seguimiento.

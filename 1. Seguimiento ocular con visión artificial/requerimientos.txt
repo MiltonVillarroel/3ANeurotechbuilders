@@ -1,0 +1,8 @@
+# Para ejecutar este código, es necesario instalar las siguientes dependencias:
+# - opencv-python
+# - mediapipe
+# - pyautogui
+# - numpy
+
+# Instala las dependencias utilizando el siguiente comando en la terminal:
+# pip install opencv-python mediapipe pyautogui numpy
