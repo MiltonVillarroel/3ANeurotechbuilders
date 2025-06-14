@@ -1,10 +1,14 @@
 #include "Seeed_BME280.h"
 #include <Wire.h>
 #include <TFT_eSPI.h>
+#include <SdFat.h>
 
 #define BUTTON_A_PIN WIO_KEY_A  // Cambiar umbral
 #define BUTTON_B_PIN WIO_KEY_B  // Disminuir
 #define BUTTON_C_PIN WIO_KEY_C  // Aumentar
+
+SdFat SD;
+File archivo;
 
 BME280 bme280;
 TFT_eSPI tft;
@@ -52,6 +56,24 @@ void setup() {
   actualizarMiniConfig();
 
   delay(2000);
+
+if (!SD.begin(SDCARD_SS_PIN)) {
+  Serial.println("No se pudo inicializar SD");
+} 
+else {
+  archivo = SD.open("umbrales.txt", FILE_READ);
+  if (archivo) {
+    umbralIzquierdo = archivo.parseFloat();
+    umbralDerecho = archivo.parseFloat();
+    umbralCentro = archivo.parseFloat();
+    archivo.close();
+    Serial.println("Umbrales cargados de SD.");
+  }
+  else {
+    Serial.println("Archivo de umbrales no encontrado. Usando valores por defecto.");
+  }
+}
+
   presionBase = bme280.getPressure();
 }
 
@@ -66,18 +88,21 @@ void loop() {
 
   if (cambiar) {
     modoCalibracion = (modoCalibracion + 1) % 3;  // 0 -> 1 -> 2 -> 0
+    guardarUmbrales();
     delay(250);
   }
   if (disminuir) {
     if (modoCalibracion == 0) umbralIzquierdo = max(0.0, umbralIzquierdo - 5.0);
     else if (modoCalibracion == 1) umbralDerecho = max(5.0, umbralDerecho - 5.0);
     else umbralCentro = max(10.0, umbralCentro - 5.0);
+    guardarUmbrales();
     delay(150);
   }
   if (aumentar) {
     if (modoCalibracion == 0) umbralIzquierdo += 5.0;
     else if (modoCalibracion == 1) umbralDerecho += 5.0;
     else umbralCentro += 5.0;
+    guardarUmbrales();
     delay(150);
   }
 
@@ -205,4 +230,17 @@ void actualizarMiniConfig() {
   tft.println("B: -5");
   tft.setCursor(10, 170);
   tft.println("C: +5");
+}
+
+void guardarUmbrales() {
+  archivo = SD.open("umbrales.txt", FILE_WRITE);
+  if (archivo) {
+    archivo.println(umbralIzquierdo);
+    archivo.println(umbralDerecho);
+    archivo.println(umbralCentro);
+    archivo.close();
+    Serial.println("Umbrales guardados.");
+  } else {
+    Serial.println("Error al guardar umbrales.");
+  }
 }
